@@ -16,6 +16,12 @@ However the Symfony profiler provides a lot of useful information about the appl
 
 ![Nette Tracy with Symfony profiler screenshot](docs/tracy-with-profiler.png)
 
+### Console integration
+
+To provide the same comfort while using [Symfony Console](http://symfony.com/doc/current/components/console/introduction.html) this bundle will save a rendered BlueScreen to a file and show you a link for it. If you configure it, it will open the exception directly in your browser.
+
+![Link to generated BlueScreen in Console](docs/tracy-in-console.png)
+
 Usage
 -----
 
@@ -25,6 +31,10 @@ If you need to change the default position of this listener (see order in `app/c
 
 This bundle expects that you are using the default Symfony profiler screen rendered via the [TwigBundle](http://symfony.com/doc/current/reference/configuration/twig.html), which must be registered.
 
+Console integration also works out of the box, if you do not have an `console.exception` listener that would prevent execution of this one. Again, this can be tweaked using the respective `listener_priority` option.
+
+Configure the `browser` option to open the exceptions directly in your browser, configured binary must be executable with [`exec()`](http://php.net/manual/en/function.exec.php).
+
 Configuration
 -------------
 
@@ -33,6 +43,20 @@ Configuration structure with listed default values:
 ```yaml
 tracy_blue_screen:
     controller:
+        # Priority with which the listener will be registered.
+        listener_priority:    0
+
+    console:
+        # Directory, where BlueScreens for console will be stored.
+        # If you are already using Tracy for logging, set this to the same.
+        # This will be only used, if given Tracy\Logger instance does not have a directory set.
+        log_directory:        '%kernel.logs_dir%'
+
+        # Configure this to open generated BlueScreen in your browser.
+        # Configuration option may be for example 'google-chrome'
+        # or 'firefox'and it will be invoked as a shell command.
+        browser:              null
+
         # Priority with which the listener will be registered.
         listener_priority:    0
 ```
