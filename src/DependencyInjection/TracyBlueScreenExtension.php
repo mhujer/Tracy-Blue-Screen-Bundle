@@ -29,6 +29,7 @@ class TracyBlueScreenExtension extends \Symfony\Component\HttpKernel\DependencyI
 		$debug = $container->getParameter('kernel.debug');
 
 		if ($environment === 'dev' && $debug === true) {
+			$loader->load('console_listener.yml');
 			$loader->load('controller_listener.yml');
 		}
 	}
