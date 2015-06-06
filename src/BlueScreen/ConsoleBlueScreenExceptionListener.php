@@ -25,8 +25,16 @@ class ConsoleBlueScreenExceptionListener
 
 	public function onConsoleException(ConsoleExceptionEvent $event)
 	{
-		if ($this->tracyLogger->directory === null) {
-			return;
+		if (
+			$this->tracyLogger->directory === null
+			|| !is_dir($this->tracyLogger->directory)
+			|| !is_writable($this->tracyLogger->directory)
+		) {
+			throw new \InvalidArgumentException(sprintf(
+				'Log directory must be a writable directory, %s [%s] given',
+				$this->tracyLogger->directory,
+				gettype($this->tracyLogger->directory)
+			), 0, $event->getException());
 		}
 
 		$loggerReflection = new ReflectionClass($this->tracyLogger);
